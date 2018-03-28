@@ -8,7 +8,7 @@ use specs::{Dispatcher, DispatcherBuilder, World};
 use components::{register_components, Controlled, Position, Renderable, RenderableType, Rotation,
                  Shapes};
 use system::RenderingSystem;
-use resources::{DeltaTime, PlayerInput};
+use resources::{DeltaTime, PlayerInput, Window};
 
 use player::systems::PlayerMovementSystem;
 
@@ -23,11 +23,12 @@ impl<'a, 'b> Game<'a, 'b> {
     pub fn new(ctx: &mut Context) -> GameResult<Game<'a, 'b>> {
         let mut world = World::new();
 
+        let coords = ggez::graphics::get_screen_coordinates(&ctx);
+
         register_components(&mut world);
         world.add_resource(DeltaTime::default());
         world.add_resource(PlayerInput::default());
-
-        let coords = ggez::graphics::get_screen_coordinates(&ctx);
+        world.add_resource(Window::new(coords.w, coords.h));
 
         world
             .create_entity()
