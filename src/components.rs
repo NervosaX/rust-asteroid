@@ -1,4 +1,3 @@
-use std::f32::consts::PI;
 use specs::{World, VecStorage};
 
 #[derive(Debug, Component, Default)]
@@ -26,7 +25,7 @@ impl Rotation {
     }
 
     pub fn to_radians(&self) -> f32 {
-        (PI / 180.0) * self.degrees
+        self.degrees.to_radians()
     }
 
     pub fn to_degrees(&self) -> f32 {
