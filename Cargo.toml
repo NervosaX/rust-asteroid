@@ -1,0 +1,9 @@
+[package]
+name = "gg-asteroid"
+version = "0.1.0"
+authors = ["Adam Hoddinott <adam.hoddinott@salespreso.com>"]
+
+[dependencies]
+ggez = "0.4"
+specs = "0.10.0"
+specs-derive = "*"
