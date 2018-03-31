@@ -6,7 +6,7 @@ use ggez::{Context, GameResult};
 
 use specs::{Dispatcher, DispatcherBuilder, World};
 use components::{register_components, Controlled, Position, Renderable, RenderableType, Rotation,
-                 Shapes};
+                 Shapes, Velocity};
 use system::RenderingSystem;
 use resources::{DeltaTime, PlayerInput, Window};
 
@@ -35,6 +35,7 @@ impl<'a, 'b> Game<'a, 'b> {
             .with(Controlled)
             .with(Position::new(coords.w / 2.0, coords.h / 2.0))
             .with(Rotation::new(0.0))
+            .with(Velocity::new(0.0, 0.0))
             .with(Renderable {
                 renderable_type: RenderableType::Shape(Shapes::Triangle { w: 20.0, h: 40.0 }),
             })
@@ -83,6 +84,7 @@ impl<'a, 'b> EventHandler for Game<'a, 'b> {
             match keycode {
                 Keycode::Left => input.left = true,
                 Keycode::Right => input.right = true,
+                Keycode::Up => input.up = true,
                 _ => {}
             }
         }
@@ -95,6 +97,7 @@ impl<'a, 'b> EventHandler for Game<'a, 'b> {
             match keycode {
                 Keycode::Left => input.left = false,
                 Keycode::Right => input.right = false,
+                Keycode::Up => input.up = false,
                 _ => {}
             }
         }

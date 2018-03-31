@@ -1,15 +1,13 @@
+use ggez::graphics::Vector2;
 use specs::{World, VecStorage};
 
-#[derive(Debug, Component, Default)]
+#[derive(Debug, Component)]
 #[component(VecStorage)]
-pub struct Position {
-    pub x: f32,
-    pub y: f32,
-}
+pub struct Position(pub Vector2);
 
 impl Position {
     pub fn new(x: f32, y: f32) -> Self {
-        Self { x, y }
+        Position(Vector2::new(x, y))
     }
 }
 
@@ -53,10 +51,20 @@ pub struct Renderable {
 #[component(VecStorage)]
 pub struct Controlled;
 
+#[derive(Debug, Component)]
+#[component(VecStorage)]
+pub struct Velocity(pub Vector2);
+
+impl Velocity {
+    pub fn new(x: f32, y: f32) -> Self {
+        Velocity(Vector2::new(x, y))
+    }
+}
 
 pub fn register_components(world: &mut World) {
     world.register::<Position>();
     world.register::<Rotation>();
     world.register::<Renderable>();
     world.register::<Controlled>();
+    world.register::<Velocity>();
 }

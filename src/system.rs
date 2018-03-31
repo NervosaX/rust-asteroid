@@ -51,7 +51,7 @@ impl<'a, 'c> System<'a> for RenderingSystem<'c> {
                                     graphics::draw(
                                         self.ctx,
                                         &poly,
-                                        Point2::new(pos.x + w / 2.0, pos.y - h / 2.0),
+                                        Point2::new(pos.0.x + w / 2.0, pos.0.y - h / 2.0),
                                         rotation.to_radians())
                                 })
                                 // TODO: I don't know the best way to deal with these errors...
