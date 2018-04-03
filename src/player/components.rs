@@ -1,4 +1,5 @@
 use ggez::graphics::{Point2};
+use game::components::Shape;
 
 #[derive(Debug, Clone)]
 pub struct Player {
@@ -25,5 +26,11 @@ impl Player {
             height,
             points,
         }
+    }
+}
+
+impl Shape for Player {
+    fn get_points(&self) -> &Vec<Point2> {
+        &self.points
     }
 }

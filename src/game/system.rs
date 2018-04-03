@@ -2,7 +2,7 @@ use ggez::Context;
 use ggez::graphics;
 use ggez::graphics::{DrawMode, MeshBuilder, Point2, WHITE};
 use specs::{Entities, Join, ReadStorage, System};
-use components::{Position, Renderable, RenderableType, Rotation, Shapes};
+use game::components::{Position, Renderable, RenderableType, Rotation, Shapes};
 
 pub struct RenderingSystem<'c> {
     ctx: &'c mut Context,

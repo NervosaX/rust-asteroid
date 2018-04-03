@@ -1,7 +1,7 @@
 use rand;
 use rand::Rng;
 use ggez::graphics::{Point2};
-use components::Shape;
+use game::components::Shape;
 
 #[derive(Debug, Clone)]
 pub struct Asteroid {

@@ -8,9 +8,6 @@ extern crate specs_derive;
 pub mod player;
 pub mod asteroid;
 pub mod game;
-pub mod components;
-pub mod system;
-pub mod resources;
 
 use ggez::event;
 use ggez::Context;

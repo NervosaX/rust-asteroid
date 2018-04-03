@@ -1,3 +1,7 @@
+pub mod components;
+pub mod resources;
+pub mod system;
+
 use ggez;
 use ggez::event::{EventHandler, Keycode, Mod};
 use ggez::graphics;
@@ -5,12 +9,12 @@ use ggez::timer;
 use ggez::{Context, GameResult};
 
 use specs::{Dispatcher, DispatcherBuilder, World};
-use components::{register_components, Controlled, Position, Renderable, RenderableType, Rotation,
+use game::components::{register_components, Controlled, Position, Renderable, RenderableType, Rotation,
                  Shapes, Velocity};
 use asteroid::components::Asteroid;
 use player::components::Player;
-use system::RenderingSystem;
-use resources::{DeltaTime, PlayerInput, Window};
+use game::system::RenderingSystem;
+use game::resources::{DeltaTime, PlayerInput, Window};
 
 use player::systems::PlayerMovementSystem;
 

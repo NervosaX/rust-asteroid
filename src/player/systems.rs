@@ -1,7 +1,7 @@
 use ggez::graphics::Vector2;
 use specs::{Fetch, Join, ReadStorage, System, WriteStorage};
-use resources::{DeltaTime, PlayerInput, Window};
-use components::{Controlled, Position, Rotation, Velocity};
+use game::resources::{DeltaTime, PlayerInput, Window};
+use game::components::{Controlled, Position, Rotation, Velocity};
 
 pub struct PlayerMovementSystem;
 
