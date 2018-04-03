@@ -55,13 +55,13 @@ impl<'a> System<'a> for PlayerMovementSystem {
                 match pos.0.x {
                     x if x < 0.0 => pos.0.x = window.width,
                     x if x > window.width => pos.0.x = 0.0,
-                    _ => {},
+                    _ => {}
                 }
 
                 match pos.0.y {
                     y if y < 0.0 => pos.0.y = window.height,
                     y if y > window.height => pos.0.y = 0.0,
-                    _ => {},
+                    _ => {}
                 }
             });
     }

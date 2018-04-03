@@ -1,4 +1,4 @@
-use ggez::graphics::{Point2};
+use ggez::graphics::Point2;
 use game::components::Shape;
 
 #[derive(Debug, Clone)]

@@ -9,8 +9,8 @@ use ggez::timer;
 use ggez::{Context, GameResult};
 
 use specs::{Dispatcher, DispatcherBuilder, World};
-use game::components::{register_components, Controlled, Position, Renderable, RenderableType, Rotation,
-                 Shapes, Velocity};
+use game::components::{register_components, Controlled, Position, Renderable, RenderableType,
+                       Rotation, Shapes, Velocity};
 use asteroid::components::Asteroid;
 use player::components::Player;
 use game::system::RenderingSystem;
@@ -52,33 +52,36 @@ impl<'a, 'b> Game<'a, 'b> {
         let asteroid2 = Asteroid::new(10.0);
         let asteroid3 = Asteroid::new(100.0);
 
-        world.create_entity()
+        world
+            .create_entity()
             .with(Position::new(100.0, 100.0))
             .with(Renderable {
                 renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid)),
             })
             .build();
-        world.create_entity()
+        world
+            .create_entity()
             .with(Position::new(200.0, 200.0))
             .with(Renderable {
                 renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid1)),
             })
             .build();
 
-        world.create_entity()
+        world
+            .create_entity()
             .with(Position::new(300.0, 300.0))
             .with(Renderable {
                 renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid2)),
             })
             .build();
 
-        world.create_entity()
+        world
+            .create_entity()
             .with(Position::new(400.0, 400.0))
             .with(Renderable {
                 renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid3)),
             })
             .build();
-
 
         let dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
             .add(PlayerMovementSystem, "p.movement", &[])

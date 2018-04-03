@@ -1,8 +1,7 @@
-use ggez::graphics::{Vector2, Point2};
-use specs::{World, VecStorage};
+use ggez::graphics::{Point2, Vector2};
+use specs::{VecStorage, World};
 use player::components::Player;
 use asteroid::components::Asteroid;
-
 
 #[derive(Debug, Component)]
 #[component(VecStorage)]
@@ -17,7 +16,7 @@ impl Position {
 #[derive(Debug, Component, Default)]
 #[component(VecStorage)]
 pub struct Rotation {
-    pub degrees: f32
+    pub degrees: f32,
 }
 
 impl Rotation {
@@ -33,7 +32,6 @@ impl Rotation {
         self.degrees
     }
 }
-
 
 pub trait Shape {
     fn get_points(&self) -> &Vec<Point2>;
