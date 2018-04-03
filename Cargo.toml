@@ -7,3 +7,4 @@ authors = ["Adam Hoddinott <adam.hoddinott@salespreso.com>"]
 ggez = "0.4"
 specs = "0.10.0"
 specs-derive = "*"
+rand = "0.4"

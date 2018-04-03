@@ -7,6 +7,8 @@ use ggez::{Context, GameResult};
 use specs::{Dispatcher, DispatcherBuilder, World};
 use components::{register_components, Controlled, Position, Renderable, RenderableType, Rotation,
                  Shapes, Velocity};
+use asteroid::components::Asteroid;
+use player::components::Player;
 use system::RenderingSystem;
 use resources::{DeltaTime, PlayerInput, Window};
 
@@ -37,9 +39,42 @@ impl<'a, 'b> Game<'a, 'b> {
             .with(Rotation::new(0.0))
             .with(Velocity::new(0.0, 0.0))
             .with(Renderable {
-                renderable_type: RenderableType::Shape(Shapes::Triangle { w: 20.0, h: 40.0 }),
+                renderable_type: RenderableType::Shape(Shapes::Player(Player::new(20.0, 40.0))),
             })
             .build();
+
+        let asteroid = Asteroid::new(30.0);
+        let asteroid1 = Asteroid::new(60.0);
+        let asteroid2 = Asteroid::new(10.0);
+        let asteroid3 = Asteroid::new(100.0);
+
+        world.create_entity()
+            .with(Position::new(100.0, 100.0))
+            .with(Renderable {
+                renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid)),
+            })
+            .build();
+        world.create_entity()
+            .with(Position::new(200.0, 200.0))
+            .with(Renderable {
+                renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid1)),
+            })
+            .build();
+
+        world.create_entity()
+            .with(Position::new(300.0, 300.0))
+            .with(Renderable {
+                renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid2)),
+            })
+            .build();
+
+        world.create_entity()
+            .with(Position::new(400.0, 400.0))
+            .with(Renderable {
+                renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid3)),
+            })
+            .build();
+
 
         let dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
             .add(PlayerMovementSystem, "p.movement", &[])

@@ -1,5 +1,8 @@
-use ggez::graphics::Vector2;
+use ggez::graphics::{Vector2, Point2};
 use specs::{World, VecStorage};
+use player::components::Player;
+use asteroid::components::Asteroid;
+
 
 #[derive(Debug, Component)]
 #[component(VecStorage)]
@@ -31,12 +34,22 @@ impl Rotation {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
-pub enum Shapes {
-    Triangle { w: f32, h: f32 },
+
+pub trait Shape {
+    fn get_points(&self) -> &Vec<Point2>;
+
+    fn overlaps(&self, shape: &Shape) -> bool {
+        true
+    }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone)]
+pub enum Shapes {
+    Player(Player),
+    Asteroid(Asteroid),
+}
+
+#[derive(Debug, Clone)]
 pub enum RenderableType {
     Shape(Shapes),
 }

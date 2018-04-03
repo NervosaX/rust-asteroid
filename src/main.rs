@@ -1,10 +1,12 @@
 extern crate specs;
+extern crate rand;
 extern crate ggez;
 
 #[macro_use]
 extern crate specs_derive;
 
 pub mod player;
+pub mod asteroid;
 pub mod game;
 pub mod components;
 pub mod system;
