@@ -1,6 +1,6 @@
 use rand;
 use rand::Rng;
-use ggez::graphics::{Point2};
+use ggez::graphics::Point2;
 use game::components::Shape;
 
 #[derive(Debug, Clone)]
@@ -33,10 +33,7 @@ impl Asteroid {
 
         points.push(Point2::new(x, y));
 
-        Self {
-            radius,
-            points: points
-        }
+        Self { radius, points }
     }
 }
 

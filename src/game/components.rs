@@ -1,11 +1,15 @@
 use ggez::graphics::{Point2, Vector2};
-use specs::{VecStorage, World};
+use specs::prelude::{VecStorage, World, Component};
 use player::components::Player;
 use asteroid::components::Asteroid;
+use assets::components::Asset;
 
-#[derive(Debug, Component)]
-#[component(VecStorage)]
+#[derive(Debug)]
 pub struct Position(pub Vector2);
+
+impl Component for Position {
+    type Storage = VecStorage<Self>;
+}
 
 impl Position {
     pub fn new(x: f32, y: f32) -> Self {
@@ -13,8 +17,7 @@ impl Position {
     }
 }
 
-#[derive(Debug, Component, Default)]
-#[component(VecStorage)]
+#[derive(Debug, Default)]
 pub struct Rotation {
     pub degrees: f32,
 }
@@ -33,10 +36,14 @@ impl Rotation {
     }
 }
 
+impl Component for Rotation {
+    type Storage = VecStorage<Self>;
+}
+
 pub trait Shape {
     fn get_points(&self) -> &Vec<Point2>;
 
-    fn overlaps(&self, shape: &Shape) -> bool {
+    fn overlaps(&self, _shape: &Shape) -> bool {
         true
     }
 }
@@ -52,18 +59,23 @@ pub enum RenderableType {
     Shape(Shapes),
 }
 
-#[derive(Debug, Component)]
-#[component(VecStorage)]
+#[derive(Debug)]
 pub struct Renderable {
     pub renderable_type: RenderableType,
 }
 
-#[derive(Debug, Component)]
-#[component(VecStorage)]
+impl Component for Renderable {
+    type Storage = VecStorage<Self>;
+}
+
+#[derive(Debug)]
 pub struct Controlled;
 
-#[derive(Debug, Component)]
-#[component(VecStorage)]
+impl Component for Controlled {
+    type Storage = VecStorage<Self>;
+}
+
+#[derive(Debug)]
 pub struct Velocity(pub Vector2);
 
 impl Velocity {
@@ -72,10 +84,15 @@ impl Velocity {
     }
 }
 
+impl Component for Velocity {
+    type Storage = VecStorage<Self>;
+}
+
 pub fn register_components(world: &mut World) {
     world.register::<Position>();
     world.register::<Rotation>();
     world.register::<Renderable>();
     world.register::<Controlled>();
     world.register::<Velocity>();
+    world.register::<Asset>();
 }

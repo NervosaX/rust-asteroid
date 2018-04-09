@@ -1,13 +1,19 @@
-extern crate specs;
-extern crate rand;
+#![cfg_attr(feature = "clippy", feature(plugin))]
+#![cfg_attr(feature = "clippy", plugin(clippy))]
 extern crate ggez;
+extern crate rand;
+extern crate specs;
+extern crate shred;
 
 #[macro_use]
 extern crate specs_derive;
+#[macro_use]
+extern crate shred_derive;
 
 pub mod player;
 pub mod asteroid;
 pub mod game;
+pub mod assets;
 
 use ggez::event;
 use ggez::Context;

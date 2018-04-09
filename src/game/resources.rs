@@ -22,3 +22,28 @@ impl Window {
         Self { width, height }
     }
 }
+
+
+
+#[derive(Debug)]
+pub enum State {
+    NewLevel,
+    InProgress,
+    Dead,
+}
+
+
+#[derive(Debug)]
+pub struct GameWorld {
+    pub level: u32,
+    pub state: State
+}
+
+impl GameWorld {
+    pub fn new() -> Self {
+        Self {
+            level: 1,
+            state: State::NewLevel
+        }
+    }
+}

@@ -5,6 +5,8 @@ authors = ["Adam Hoddinott <adam.hoddinott@salespreso.com>"]
 
 [dependencies]
 ggez = "0.4"
-specs = "0.10.0"
+specs = { git = "https://github.com/slide-rs/specs.git" }
 specs-derive = "*"
+shred = "0.6.2"
+shred-derive = "0.4"
 rand = "0.4"

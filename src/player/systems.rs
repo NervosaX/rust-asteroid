@@ -1,30 +1,39 @@
 use ggez::graphics::Vector2;
-use specs::{Fetch, Join, ReadStorage, System, WriteStorage};
+use specs::prelude::{Fetch, Join, ReadStorage, System, WriteStorage};
 use game::resources::{DeltaTime, PlayerInput, Window};
 use game::components::{Controlled, Position, Rotation, Velocity};
+
+#[derive(SystemData)]
+pub struct Data<'a> {
+    dt: Fetch<'a, DeltaTime>,
+    input: Fetch<'a, PlayerInput>,
+    window: Fetch<'a, Window>,
+    controlled: ReadStorage<'a, Controlled>,
+    velocity: WriteStorage<'a, Velocity>,
+    rotation: WriteStorage<'a, Rotation>,
+    position: WriteStorage<'a, Position>,
+}
 
 pub struct PlayerMovementSystem;
 
 impl<'a> System<'a> for PlayerMovementSystem {
-    type SystemData = (
-        Fetch<'a, DeltaTime>,
-        Fetch<'a, PlayerInput>,
-        Fetch<'a, Window>,
-        ReadStorage<'a, Controlled>,
-        WriteStorage<'a, Velocity>,
-        WriteStorage<'a, Rotation>,
-        WriteStorage<'a, Position>,
-    );
+    type SystemData = Data<'a>;
 
-    fn run(&mut self, data: Self::SystemData) {
+    fn run(&mut self, mut data: Data) {
         const ROTATION_SPEED: f32 = 5.0;
         const THRUST_SPEED: f32 = 8.0;
         const MAX_SPEED: f32 = 8.0;
 
-        let (dt, input, window, controlled, mut velocity, mut rotation, mut position) = data;
+        let input = &data.input;
+        let dt = &data.dt;
+        let window = &data.window;
 
-        (&controlled, &mut velocity, &mut rotation, &mut position)
-            .join()
+        (
+            &data.controlled,
+            &mut data.velocity,
+            &mut data.rotation,
+            &mut data.position,
+        ).join()
             .for_each(|(_, vel, rot, pos)| {
                 if input.left {
                     rot.degrees -= ROTATION_SPEED;
@@ -49,9 +58,8 @@ impl<'a> System<'a> for PlayerMovementSystem {
                     vel.0 += Vector2::new(x, y);
                 }
 
-                pos.0 += vel.0;
-
                 // Prevent the player from going off screen
+                // TODO: move this to affect all objects
                 match pos.0.x {
                     x if x < 0.0 => pos.0.x = window.width,
                     x if x > window.width => pos.0.x = 0.0,
