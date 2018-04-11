@@ -1,14 +1,15 @@
 use ggez::graphics::Vector2;
 use specs::prelude::{Fetch, Join, ReadStorage, System, WriteStorage};
 use game::resources::{DeltaTime, PlayerInput, Window};
-use game::components::{Controlled, Position, Rotation, Velocity};
+use game::components::{Position, Rotation, Velocity};
+use player::components::Player;
 
 #[derive(SystemData)]
 pub struct Data<'a> {
     dt: Fetch<'a, DeltaTime>,
     input: Fetch<'a, PlayerInput>,
     window: Fetch<'a, Window>,
-    controlled: ReadStorage<'a, Controlled>,
+    player: ReadStorage<'a, Player>,
     velocity: WriteStorage<'a, Velocity>,
     rotation: WriteStorage<'a, Rotation>,
     position: WriteStorage<'a, Position>,
@@ -29,7 +30,7 @@ impl<'a> System<'a> for PlayerMovementSystem {
         let window = &data.window;
 
         (
-            &data.controlled,
+            &data.player,
             &mut data.velocity,
             &mut data.rotation,
             &mut data.position,

@@ -4,9 +4,8 @@ extern crate ggez;
 extern crate rand;
 extern crate specs;
 extern crate shred;
+extern crate geo;
 
-#[macro_use]
-extern crate specs_derive;
 #[macro_use]
 extern crate shred_derive;
 

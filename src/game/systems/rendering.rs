@@ -2,8 +2,7 @@ use ggez::Context;
 use ggez::graphics;
 use ggez::graphics::{Point2, WHITE};
 use specs::prelude::{Entities, Join, ReadStorage, System};
-use game::components::{Position, Renderable, RenderableType, Rotation, Shapes};
-use assets::components::Asset;
+use game::components::{Position, Renderable, RenderableType, Rotation};
 
 #[derive(SystemData)]
 pub struct Data<'a> {
@@ -11,7 +10,6 @@ pub struct Data<'a> {
     pub position: ReadStorage<'a, Position>,
     pub rotation: ReadStorage<'a, Rotation>,
     pub renderable: ReadStorage<'a, Renderable>,
-    pub asset: ReadStorage<'a, Asset>,
 }
 
 pub struct RenderingSystem<'c> {
@@ -47,11 +45,10 @@ impl<'a, 'c> System<'a> for RenderingSystem<'c> {
         //         })
         //         .unwrap();
 
-        for (e, pos, r, a) in (
+        for (e, pos, r) in (
             &*data.entities,
             &data.position,
             &data.renderable,
-            &data.asset,
         ).join()
         {
             let rotation: &Rotation = data.rotation.get(e).unwrap_or_else(|| &default_rotation);
@@ -59,35 +56,15 @@ impl<'a, 'c> System<'a> for RenderingSystem<'c> {
             graphics::set_color(self.ctx, WHITE).unwrap();
 
             match r.renderable_type {
-                RenderableType::Shape(ref shape) => {
-                    match *shape {
-                        Shapes::Player(ref player) => {
-                            if let Some(ref mesh) = a.mesh {
-                                graphics::draw(
-                                    self.ctx,
-                                    mesh,
-                                    Point2::new(
-                                        pos.0.x + player.width / 2.0,
-                                        pos.0.y - player.height / 2.0,
-                                    ),
-                                    rotation.to_radians(),
-                                ).unwrap();
-                            }
-                        }
-                        Shapes::Asteroid(ref asteroid) => {
-                            if let Some(ref mesh) = a.mesh {
-                                graphics::draw(
-                                    self.ctx,
-                                    mesh,
-                                    Point2::new(
-                                        pos.0.x + (asteroid.radius / 2.0),
-                                        pos.0.y - (asteroid.radius / 2.0),
-                                    ),
-                                    rotation.to_radians(),
-                                ).unwrap();
-                            }
-                        }
-                    };
+                RenderableType::Mesh(ref asset) => {
+                    if let Some(ref mesh) = asset.mesh {
+                        graphics::draw(
+                            self.ctx,
+                            mesh,
+                            Point2::new(pos.0.x, pos.0.y),
+                            rotation.to_radians(),
+                        ).unwrap();
+                    }
                 }
             }
         }

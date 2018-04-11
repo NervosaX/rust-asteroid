@@ -1,5 +1,8 @@
-use specs::prelude::{Entities, FetchMut, Join, ReadStorage, System, SystemData, WriteStorage};
+use specs::prelude::{Entities, Fetch, FetchMut, LazyUpdate, System};
 use game::resources::{GameWorld, State};
+use game::components::{Position, Renderable, RenderableType, Velocity};
+use asteroid::components::Asteroid;
+use assets::components::{Asset, Polygon};
 
 pub struct LevelsSystem;
 
@@ -7,6 +10,7 @@ pub struct LevelsSystem;
 pub struct Data<'a> {
     pub entities: Entities<'a>,
     pub game_world: FetchMut<'a, GameWorld>,
+    pub updater: Fetch<'a, LazyUpdate>,
 }
 
 impl<'a> System<'a> for LevelsSystem {
@@ -15,23 +19,23 @@ impl<'a> System<'a> for LevelsSystem {
     fn run(&mut self, mut data: Data<'a>) {
         match data.game_world.state {
             State::NewLevel => {
-                // Set up asteroids for this level
                 let level = data.game_world.level;
-                for _ in 1..level + 2 {
 
+                for _ in 1..level + 2 {
+                    // Create a new asteroid entity
+                    data.updater
+                        .create_entity(&data.entities)
+                        .with(Asteroid)
+                        .with(Position::new(100.0, 100.0))
+                        .with(Velocity::new(0.0, 0.0))
+                        .with(Polygon::new(Asteroid::create_points(30.0)))
+                        .with(Renderable::new(RenderableType::Mesh(Asset::new())))
+                        .build();
                 }
 
                 data.game_world.state = State::InProgress;
             }
             _ => {}
         }
-
-        // (e,).join().for_each(|(e, game_world)| {
-
-        // })
-
-        // (&velocity, &mut position).join().for_each(|(vel, pos)| {
-        //     pos.0 += vel.0;
-        // })
     }
 }

@@ -1,13 +1,13 @@
 use ggez::Context;
 use specs::prelude::{Join, ReadStorage, System, WriteStorage};
 use ggez::graphics::{DrawMode, MeshBuilder};
-use game::components::{Renderable, RenderableType, Shapes};
-use assets::components::Asset;
+use game::components::{Renderable, RenderableType};
+use assets::components::Polygon;
 
 #[derive(SystemData)]
 pub struct Data<'a> {
-    pub renderable: ReadStorage<'a, Renderable>,
-    pub asset: WriteStorage<'a, Asset>,
+    pub polygon: ReadStorage<'a, Polygon>,
+    pub renderable: WriteStorage<'a, Renderable>
 }
 
 pub struct AssetSystem<'c> {
@@ -24,29 +24,16 @@ impl<'a, 'c> System<'a> for AssetSystem<'c> {
     type SystemData = Data<'a>;
 
     fn run(&mut self, mut data: Data) {
-        (&data.renderable, &mut data.asset).join().for_each(|(ren, a)| {
+        (&data.polygon, &mut data.renderable).join().for_each(|(polygon, ren)| {
+            match ren.renderable_type {
+                RenderableType::Mesh(ref mut asset) => {
+                    let mesh = MeshBuilder::new()
+                        .polyline(DrawMode::Line(1.0), &polygon.points)
+                        .build(self.ctx).unwrap();
 
-            if a.mesh.is_none() {
-                match ren.renderable_type {
-                    RenderableType::Shape(ref shape) => {
-                        match *shape {
-                            Shapes::Player(ref player) => {
-                                let mesh = MeshBuilder::new()
-                                    .polyline(DrawMode::Line(1.0), &player.points)
-                                    .build(self.ctx).unwrap();
-
-                                a.mesh = Some(mesh);
-                            }
-                            Shapes::Asteroid(ref asteroid) => {
-                                let mesh = MeshBuilder::new()
-                                    .polyline(DrawMode::Line(1.0), &asteroid.points)
-                                    .build(self.ctx).unwrap();
-
-                                a.mesh = Some(mesh);
-                            }
-                        };
-                    }
-                }
+                    asset.mesh = Some(mesh);
+                },
+                _ => {}
             }
         })
     }

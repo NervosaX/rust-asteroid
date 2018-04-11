@@ -1,16 +1,13 @@
 use rand;
 use rand::Rng;
 use ggez::graphics::Point2;
-use game::components::Shape;
+use specs::prelude::{VecStorage, Component};
 
 #[derive(Debug, Clone)]
-pub struct Asteroid {
-    pub radius: f32,
-    pub points: Vec<Point2>,
-}
+pub struct Asteroid;
 
 impl Asteroid {
-    pub fn new(radius: f32) -> Self {
+    pub fn create_points(radius: f32) -> Vec<Point2> {
         // Ported from https://www.openprocessing.org/sketch/71739
         let x_offset = rand::thread_rng().gen_range(0.9, 2.0) as f32;
         let y_offset = rand::thread_rng().gen_range(0.9, 2.0) as f32;
@@ -32,13 +29,10 @@ impl Asteroid {
         }
 
         points.push(Point2::new(x, y));
-
-        Self { radius, points }
+        points
     }
 }
 
-impl Shape for Asteroid {
-    fn get_points(&self) -> &Vec<Point2> {
-        &self.points
-    }
+impl Component for Asteroid {
+    type Storage = VecStorage<Self>;
 }

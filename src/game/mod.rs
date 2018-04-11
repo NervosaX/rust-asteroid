@@ -9,13 +9,12 @@ use ggez::timer;
 use ggez::{Context, GameResult};
 
 use specs::prelude::{Dispatcher, DispatcherBuilder, World};
-use game::components::{register_components, Controlled, Position, Renderable, RenderableType,
-                       Rotation, Shapes, Velocity};
-use asteroid::components::Asteroid;
+use game::components::{register_components, Position, Renderable, RenderableType, Rotation,
+                       Velocity};
 use player::components::Player;
-use game::systems::{AssetSystem, MovementSystem, RenderingSystem, LevelsSystem};
-use game::resources::{DeltaTime, PlayerInput, Window, GameWorld};
-use assets::components::Asset;
+use game::systems::{AssetSystem, CollisionSystem, LevelsSystem, MovementSystem, RenderingSystem};
+use game::resources::{DeltaTime, GameWorld, PlayerInput, Window};
+use assets::components::{Asset, Polygon};
 
 use player::systems::PlayerMovementSystem;
 
@@ -40,32 +39,19 @@ impl<'a, 'b> Game<'a, 'b> {
 
         world
             .create_entity()
-            .with(Controlled)
+            .with(Player)
             .with(Position::new(coords.w / 2.0, coords.h / 2.0))
             .with(Rotation::new(0.0))
             .with(Velocity::new(0.0, 0.0))
-            .with(Asset::new(None))
-            .with(Renderable {
-                renderable_type: RenderableType::Shape(Shapes::Player(Player::new(20.0, 40.0))),
-            })
+            .with(Polygon::new(Player::create_points(20.0, 40.0)))
+            .with(Renderable::new(RenderableType::Mesh(Asset::new())))
             .build();
-
-        // let asteroid = Asteroid::new(30.0);
-
-        // world
-        //     .create_entity()
-        //     .with(Position::new(100.0, 100.0))
-        //     .with(Velocity::new(0.0, 0.0))
-        //     .with(Asset::new(None))
-        //     .with(Renderable {
-        //         renderable_type: RenderableType::Shape(Shapes::Asteroid(asteroid)),
-        //     })
-        //     .build();
 
         let dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
             .with(LevelsSystem, "level_system", &[])
             .with(MovementSystem, "movement_system", &[])
             .with(PlayerMovementSystem, "player_movement_system", &[])
+            .with(CollisionSystem, "collision_system", &[])
             .build();
 
         Ok(Game { world, dispatcher })
