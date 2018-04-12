@@ -10,13 +10,14 @@ use ggez::{Context, GameResult};
 
 use specs::prelude::{Dispatcher, DispatcherBuilder, World};
 use game::components::{register_components, Position, Renderable, RenderableType, Rotation,
-                       Velocity};
+                       Velocity, AlwaysOnScreen};
 use player::components::Player;
 use game::systems::{AssetSystem, CollisionSystem, LevelsSystem, MovementSystem, RenderingSystem};
 use game::resources::{DeltaTime, GameWorld, PlayerInput, Window};
 use assets::components::{Asset, Polygon};
 
 use player::systems::PlayerMovementSystem;
+use bullets::systems::BulletsSystem;
 
 const DESIRED_FPS: u32 = 60;
 
@@ -40,6 +41,7 @@ impl<'a, 'b> Game<'a, 'b> {
         world
             .create_entity()
             .with(Player)
+            .with(AlwaysOnScreen)
             .with(Position::new(coords.w / 2.0, coords.h / 2.0))
             .with(Rotation::new(0.0))
             .with(Velocity::new(0.0, 0.0))
@@ -50,6 +52,7 @@ impl<'a, 'b> Game<'a, 'b> {
         let dispatcher: Dispatcher<'a, 'b> = DispatcherBuilder::new()
             .with(LevelsSystem, "level_system", &[])
             .with(MovementSystem, "movement_system", &[])
+            .with(BulletsSystem, "bullets_system", &[])
             .with(PlayerMovementSystem, "player_movement_system", &[])
             .with(CollisionSystem, "collision_system", &[])
             .build();
@@ -97,6 +100,7 @@ impl<'a, 'b> EventHandler for Game<'a, 'b> {
 
         if !repeat {
             match keycode {
+                Keycode::Space => input.attack = true,
                 Keycode::Left => input.left = true,
                 Keycode::Right => input.right = true,
                 Keycode::Up => input.up = true,
@@ -110,6 +114,7 @@ impl<'a, 'b> EventHandler for Game<'a, 'b> {
 
         if !repeat {
             match keycode {
+                Keycode::Space => input.attack = false,
                 Keycode::Left => input.left = false,
                 Keycode::Right => input.right = false,
                 Keycode::Up => input.up = false,

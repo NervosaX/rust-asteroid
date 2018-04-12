@@ -17,8 +17,22 @@ impl Asset {
     }
 }
 
+pub struct Circle {
+    pub radius: f32,
+}
+
+impl Circle {
+    pub fn new(radius: f32) -> Self {
+        Self { radius }
+    }
+}
+
+impl Component for Circle {
+    type Storage = VecStorage<Self>;
+}
 
 #[derive(Debug, Clone)]
+/// Represents points that form a polygon
 pub struct Polygon {
     pub points: Vec<Point2>,
 }
@@ -28,6 +42,7 @@ impl Polygon {
         Self {points}
     }
 
+    /// Tests if one polygon intersects another
     pub fn overlaps(&self, poly: &Polygon) -> bool {
         let poly_self: Vec<(f32, f32)> = self.points.iter().map(|p| (p.x, p.y)).collect();
         let poly_other: Vec<(f32, f32)> = poly.points.iter().map(|p| (p.x, p.y)).collect();

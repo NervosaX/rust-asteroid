@@ -28,23 +28,6 @@ impl<'a, 'c> System<'a> for RenderingSystem<'c> {
     fn run(&mut self, data: Data) {
         let default_rotation = Rotation::default();
 
-        // MeshBuilder::new()
-        //     .circle(
-        //         DrawMode::Fill,
-        //         Point2::new(0.0, 10.0),
-        //         1.0,
-        //         1.0
-        //     )
-        //     .build(self.ctx)
-        //     .and_then(|poly| {
-        //         graphics::draw(
-        //             self.ctx,
-        //             &poly,
-        //             Point2::new(10.0, 10.0),
-        //             0.0)
-        //         })
-        //         .unwrap();
-
         for (e, pos, r) in (
             &*data.entities,
             &data.position,

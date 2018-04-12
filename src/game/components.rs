@@ -2,7 +2,8 @@ use ggez::graphics::{Vector2};
 use specs::prelude::{VecStorage, World, Component};
 use player::components::Player;
 use asteroid::components::Asteroid;
-use assets::components::{Polygon, Asset};
+use assets::components::{Circle, Polygon, Asset};
+use bullets::components::Bullet;
 
 #[derive(Debug, Clone)]
 pub struct Position(pub Vector2);
@@ -75,6 +76,14 @@ impl Component for Velocity {
     type Storage = VecStorage<Self>;
 }
 
+
+#[derive(Debug)]
+pub struct AlwaysOnScreen;
+
+impl Component for AlwaysOnScreen {
+    type Storage = VecStorage<Self>;
+}
+
 pub fn register_components(world: &mut World) {
     world.register::<Position>();
     world.register::<Rotation>();
@@ -83,4 +92,7 @@ pub fn register_components(world: &mut World) {
     world.register::<Polygon>();
     world.register::<Player>();
     world.register::<Asteroid>();
+    world.register::<Bullet>();
+    world.register::<Circle>();
+    world.register::<AlwaysOnScreen>();
 }

@@ -9,6 +9,7 @@ extern crate geo;
 #[macro_use]
 extern crate shred_derive;
 
+pub mod bullets;
 pub mod player;
 pub mod asteroid;
 pub mod game;

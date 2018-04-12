@@ -1,12 +1,13 @@
-use ggez::Context;
+ use ggez::Context;
 use specs::prelude::{Join, ReadStorage, System, WriteStorage};
-use ggez::graphics::{DrawMode, MeshBuilder};
+use ggez::graphics::{Point2, DrawMode, MeshBuilder};
 use game::components::{Renderable, RenderableType};
-use assets::components::Polygon;
+use assets::components::{Circle, Polygon};
 
 #[derive(SystemData)]
 pub struct Data<'a> {
     pub polygon: ReadStorage<'a, Polygon>,
+    pub circle: ReadStorage<'a, Circle>,
     pub renderable: WriteStorage<'a, Renderable>
 }
 
@@ -32,9 +33,25 @@ impl<'a, 'c> System<'a> for AssetSystem<'c> {
                         .build(self.ctx).unwrap();
 
                     asset.mesh = Some(mesh);
-                },
-                _ => {}
+                }
             }
-        })
+        });
+
+        (&data.circle, &mut data.renderable).join().for_each(|(circle, ren)| {
+            match ren.renderable_type {
+                RenderableType::Mesh(ref mut asset) => {
+                    let mesh = MeshBuilder::new()
+                        .circle(
+                            DrawMode::Fill,
+                            Point2::new(0.0, 0.0),
+                            circle.radius,
+                            1.0
+                        )
+                        .build(self.ctx).unwrap();
+
+                    asset.mesh = Some(mesh);
+                }
+            }
+        });
     }
 }

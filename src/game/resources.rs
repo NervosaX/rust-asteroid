@@ -23,8 +23,6 @@ impl Window {
     }
 }
 
-
-
 #[derive(Debug)]
 pub enum State {
     NewLevel,

@@ -1,7 +1,7 @@
 use ggez::graphics::{Point2};
 use specs::prelude::{VecStorage, Component};
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Player;
 
 impl Player {
