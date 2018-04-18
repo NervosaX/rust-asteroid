@@ -2,9 +2,15 @@ use ggez::graphics::{Point2};
 use specs::prelude::{VecStorage, Component};
 
 #[derive(Debug)]
-pub struct Player;
+pub struct Player {
+    pub last_fired: f64,
+}
 
 impl Player {
+    pub fn new() -> Self {
+        Self { last_fired: 0.0 }
+    }
+
     pub fn create_points(width: f32, height: f32) -> Vec<Point2> {
         let mut points = Vec::new();
 

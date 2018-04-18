@@ -1,12 +1,12 @@
 use ggez::graphics::Vector2;
 use specs::prelude::{Fetch, Join, ReadStorage, System, WriteStorage};
-use game::resources::{DeltaTime, PlayerInput};
+use game::resources::{Time, PlayerInput};
 use game::components::{Rotation, Velocity};
 use player::components::Player;
 
 #[derive(SystemData)]
 pub struct Data<'a> {
-    dt: Fetch<'a, DeltaTime>,
+    dt: Fetch<'a, Time>,
     input: Fetch<'a, PlayerInput>,
     player: ReadStorage<'a, Player>,
     velocity: WriteStorage<'a, Velocity>,

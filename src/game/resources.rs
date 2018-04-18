@@ -1,6 +1,7 @@
 #[derive(Clone, Default)]
-pub struct DeltaTime {
+pub struct Time {
     pub delta: f64,
+    pub duration: f64,
 }
 
 #[derive(Debug, Clone, Default)]

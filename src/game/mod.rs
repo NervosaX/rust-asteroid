@@ -13,13 +13,13 @@ use game::components::{register_components, Position, Renderable, RenderableType
                        Velocity, AlwaysOnScreen};
 use player::components::Player;
 use game::systems::{AssetSystem, CollisionSystem, LevelsSystem, MovementSystem, RenderingSystem};
-use game::resources::{DeltaTime, GameWorld, PlayerInput, Window};
+use game::resources::{Time, GameWorld, PlayerInput, Window};
 use assets::components::{Asset, Polygon};
 
 use player::systems::PlayerMovementSystem;
 use bullets::systems::BulletsSystem;
 
-const DESIRED_FPS: u32 = 60;
+const _DESIRED_FPS: u32 = 60;
 
 pub struct Game<'a, 'b> {
     pub world: World,
@@ -34,13 +34,13 @@ impl<'a, 'b> Game<'a, 'b> {
 
         register_components(&mut world);
         world.add_resource(GameWorld::new());
-        world.add_resource(DeltaTime::default());
+        world.add_resource(Time::default());
         world.add_resource(PlayerInput::default());
         world.add_resource(Window::new(coords.w, coords.h));
 
         world
             .create_entity()
-            .with(Player)
+            .with(Player::new())
             .with(AlwaysOnScreen)
             .with(Position::new(coords.w / 2.0, coords.h / 2.0))
             .with(Rotation::new(0.0))
@@ -69,10 +69,16 @@ impl<'a, 'b> EventHandler for Game<'a, 'b> {
             rs.run_now(&self.world.res);
         }
 
-        while timer::check_update_time(ctx, DESIRED_FPS) {
-            let dt = 1.0 / f64::from(DESIRED_FPS);
-            self.world.write_resource::<DeltaTime>().delta = dt;
-        }
+        // self.world.write_resource::<Time>().delta = timer::duration_to_f64(timer::get_time_since_start(&ctx));
+            // ctx.timer_context.residual_update_dt
+
+        // while timer::check_update_time(ctx, DESIRED_FPS) {
+        // let dt = 1.0 / f64::from(DESIRED_FPS);
+        self.world.write_resource::<Time>().delta = timer::duration_to_f64(timer::get_delta(&ctx));
+        self.world.write_resource::<Time>().duration = timer::duration_to_f64(timer::get_time_since_start(&ctx));
+
+
+        // }
 
         self.dispatcher.dispatch(&self.world.res);
         self.world.maintain();
