@@ -1,10 +1,10 @@
-use specs::prelude::{Fetch, Join, ReadStorage, System, WriteStorage};
+use specs::prelude::{Read, Join, ReadStorage, System, WriteStorage};
 use game::resources::Window;
 use game::components::{Position, Velocity, AlwaysOnScreen};
 
 #[derive(SystemData)]
 pub struct Data<'a> {
-    pub window: Fetch<'a, Window>,
+    pub window: Read<'a, Window>,
     pub velocity: ReadStorage<'a, Velocity>,
     pub always_onscreen: ReadStorage<'a, AlwaysOnScreen>,
     pub position: WriteStorage<'a, Position>,

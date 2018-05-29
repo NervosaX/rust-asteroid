@@ -12,7 +12,7 @@ pub struct PlayerInput {
     pub attack: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Window {
     pub width: f32,
     pub height: f32,
@@ -38,11 +38,17 @@ pub struct GameWorld {
     pub state: State
 }
 
-impl GameWorld {
-    pub fn new() -> Self {
-        Self {
+impl Default for GameWorld {
+    fn default() -> GameWorld {
+        GameWorld {
             level: 1,
             state: State::NewLevel
         }
+    }
+}
+
+impl GameWorld {
+    pub fn new() -> Self {
+        GameWorld::default()
     }
 }

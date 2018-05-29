@@ -1,16 +1,16 @@
-use specs::prelude::{Entities, Fetch, Join, LazyUpdate, ReadStorage, System, WriteStorage};
-use game::resources::{Time, PlayerInput, Window};
-use game::components::{Position, Renderable, RenderableType, Rotation, Velocity};
+use specs::prelude::{Entities, Read, Join, LazyUpdate, ReadStorage, System, WriteStorage};
+use game::resources::{PlayerInput, Time, Window};
+use game::components::{Destructable, Position, Renderable, RenderableType, Rotation, Velocity};
 use player::components::Player;
 use assets::components::{Asset, Circle};
 use bullets::components::Bullet;
 
 #[derive(SystemData)]
 pub struct Data<'a> {
-    pub window: Fetch<'a, Window>,
-    pub dt: Fetch<'a, Time>,
-    pub input: Fetch<'a, PlayerInput>,
-    pub updater: Fetch<'a, LazyUpdate>,
+    pub window: Read<'a, Window>,
+    pub dt: Read<'a, Time>,
+    pub input: Read<'a, PlayerInput>,
+    pub updater: Read<'a, LazyUpdate>,
     pub entities: Entities<'a>,
     pub bullet: WriteStorage<'a, Bullet>,
     pub player: WriteStorage<'a, Player>,
@@ -59,6 +59,7 @@ impl<'a> System<'a> for BulletsSystem {
                         updater
                             .create_entity(&entities)
                             .with(Bullet)
+                            .with(Destructable::new())
                             // 20.0 here is half the height of a player. This should probably
                             // be in a const or accessible in the Player component?
                             .with(Position::new(x * 20.0 + pos.0.x, y * 20.0 + pos.0.y))

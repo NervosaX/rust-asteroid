@@ -16,6 +16,7 @@ use game::systems::{AssetSystem, CollisionSystem, LevelsSystem, MovementSystem, 
 use game::resources::{Time, GameWorld, PlayerInput, Window};
 use assets::components::{Asset, Polygon};
 
+use asteroid::systems::AsteroidSystem;
 use player::systems::PlayerMovementSystem;
 use bullets::systems::BulletsSystem;
 
@@ -55,6 +56,7 @@ impl<'a, 'b> Game<'a, 'b> {
             .with(BulletsSystem, "bullets_system", &[])
             .with(PlayerMovementSystem, "player_movement_system", &[])
             .with(CollisionSystem, "collision_system", &[])
+            .with(AsteroidSystem, "asteroid_system", &[])
             .build();
 
         Ok(Game { world, dispatcher })

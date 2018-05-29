@@ -2,11 +2,35 @@ use rand;
 use rand::Rng;
 use ggez::graphics::Point2;
 use specs::prelude::{VecStorage, Component};
+use assets::components::Polygon;
 
-#[derive(Debug, Clone)]
-pub struct Asteroid;
+#[derive(Debug, Clone, Copy)]
+pub enum AsteroidSize {
+    Small,
+    Medium,
+    Large,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Asteroid {
+    size: AsteroidSize,
+}
 
 impl Asteroid {
+    pub fn new(size: AsteroidSize) -> Self {
+        Self { size }
+    }
+
+    pub fn to_polygon(&self) -> Polygon {
+        let size = match self.size {
+            AsteroidSize::Large => 90.0,
+            AsteroidSize::Medium => 50.0,
+            AsteroidSize::Small => 30.0,
+        };
+
+        Polygon::new(Asteroid::create_points(size))
+    }
+
     pub fn create_points(radius: f32) -> Vec<Point2> {
         // Ported from https://www.openprocessing.org/sketch/71739
         let x_offset = rand::thread_rng().gen_range(0.9, 2.0) as f32;

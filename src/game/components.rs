@@ -84,6 +84,22 @@ impl Component for AlwaysOnScreen {
     type Storage = VecStorage<Self>;
 }
 
+
+#[derive(Debug)]
+pub struct Destructable {
+    pub destroyed: bool,
+}
+
+impl Destructable {
+    pub fn new() -> Self {
+        Self { destroyed: false }
+    }
+}
+
+impl Component for Destructable {
+    type Storage = VecStorage<Self>;
+}
+
 pub fn register_components(world: &mut World) {
     world.register::<Position>();
     world.register::<Rotation>();
@@ -95,4 +111,5 @@ pub fn register_components(world: &mut World) {
     world.register::<Bullet>();
     world.register::<Circle>();
     world.register::<AlwaysOnScreen>();
+    world.register::<Destructable>();
 }
